@@ -223,14 +223,14 @@ Full step-by-step instructions:
 
 This project demonstrates proficiency in:
 
-✅ **Microservices Architecture**: Designing independent, scalable services  
-✅ **RESTful API Design**: Creating well-structured, documented APIs  
-✅ **Database Design**: Implementing database-per-service pattern  
-✅ **Containerization**: Building optimized Docker images  
-✅ **Kubernetes**: Deploying and managing containerized applications  
-✅ **Service Communication**: Inter-service REST calls with Feign  
-✅ **Frontend Development**: Building responsive React applications  
-✅ **DevOps Practices**: CI/CD readiness, infrastructure as code  
+ **Microservices Architecture**: Designing independent, scalable services  
+ **RESTful API Design**: Creating well-structured, documented APIs  
+ **Database Design**: Implementing database-per-service pattern  
+ **Containerization**: Building optimized Docker images  
+ **Kubernetes**: Deploying and managing containerized applications  
+ **Service Communication**: Inter-service REST calls with Feign  
+ **Frontend Development**: Building responsive React applications  
+ **DevOps Practices**: CI/CD readiness, infrastructure as code  
 
 ---
 
