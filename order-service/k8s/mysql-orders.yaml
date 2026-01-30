@@ -1,0 +1,93 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-orders-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-orders-config
+data:
+  MYSQL_DATABASE: orderdb
+  MYSQL_USER: order_user
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-orders-secret
+type: Opaque
+stringData:
+  MYSQL_PASSWORD: order_pass
+  MYSQL_ROOT_PASSWORD: rootpass
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-orders
+spec:
+  type: ClusterIP
+  selector:
+    app: mysql-orders
+  ports:
+    - port: 3306
+      targetPort: 3306
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-orders
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: mysql-orders
+  template:
+    metadata:
+      labels:
+        app: mysql-orders
+    spec:
+      containers:
+      - name: mysql-orders
+        image: mysql:8.0
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: mysql-orders-config
+              key: MYSQL_DATABASE
+        - name: MYSQL_USER
+          valueFrom:
+            configMapKeyRef:
+              name: mysql-orders-config
+              key: MYSQL_USER
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-orders-secret
+              key: MYSQL_PASSWORD
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-orders-secret
+              key: MYSQL_ROOT_PASSWORD
+        volumeMounts:
+        - name: mysql-orders-data
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-orders-data
+        persistentVolumeClaim:
+          claimName: mysql-orders-pvc
